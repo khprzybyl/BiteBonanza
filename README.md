@@ -11,10 +11,11 @@ These instructions will help you get a copy of Bite Bonanza up and running on yo
 ### Prerequisites
 
 Before you start, ensure you have the following installed:
-- [Node.js](https://nodejs.org/)
-- [Yarn](https://yarnpkg.com/)
-- [Expo CLI](https://expo.dev/tools#cli)
-- Either the Expo Go app for iOS or Android, or a simulator/emulator for your platform
+
+-   [Node.js](https://nodejs.org/)
+-   [Yarn](https://yarnpkg.com/)
+-   [Expo CLI](https://expo.dev/tools#cli)
+-   Either the Expo Go app for iOS or Android, or a simulator/emulator for your platform
 
 ### Installing
 
@@ -34,9 +35,8 @@ yarn install
 
 yarn ios
 
-
 ## Built With
 
-- [React Native](https://reactnative.dev/) - The framework used
-- [Expo](https://expo.dev/) - Platform for universal React applications
-- [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript for better developer experience
+-   [React Native](https://reactnative.dev/) - The framework used
+-   [Expo](https://expo.dev/) - Platform for universal React applications
+-   [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript for better developer experience

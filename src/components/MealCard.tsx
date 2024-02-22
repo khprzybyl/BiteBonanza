@@ -1,11 +1,28 @@
-import React from 'react';
-import { useState } from 'react';
-import { StyleSheet, TouchableOpacity, Image, Text, View } from 'react-native';
-import { DEFAULT_IMAGE } from '../constants/Images.ts';
-import { layout } from '../constants/Layout.ts';
+import React, { useState } from 'react';
+import {
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    Text,
+    ViewStyle,
+} from 'react-native';
+import { layout } from '../constants/Layout';
+import { DEFAULT_IMAGE } from '../constants/Images';
 
-export const MealCard = ({ onPress, imageSrc, title, style }) => {
-    const [imageSource, setImageSource] = useState(imageSrc);
+interface MealCardProps {
+    onPress: () => void;
+    imageSrc: string;
+    title: string;
+    style?: ViewStyle | null;
+}
+
+export const MealCard: React.FC<MealCardProps> = ({
+    onPress,
+    imageSrc,
+    title,
+    style,
+}) => {
+    const [imageSource, setImageSource] = useState<string>(imageSrc);
 
     const handleImageError = () => {
         setImageSource(DEFAULT_IMAGE);

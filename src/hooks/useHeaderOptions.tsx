@@ -1,7 +1,9 @@
 import React from 'react';
-import { BackButton } from '../components/BackButton.tsx';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../types/navigationTypes';
+import { BackButton } from '../components/BackButton';
 
-const useHeaderOptions = (navigation) => {
+const useHeaderOptions = (navigation: NavigationProp<RootStackParamList>) => {
     React.useEffect(() => {
         navigation.setOptions({
             headerTransparent: true,

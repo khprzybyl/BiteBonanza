@@ -1,16 +1,13 @@
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { MealSelection } from './src/screens/MealSelection.tsx';
-import { MealDetails } from './src/screens/MealDetails.tsx';
+import { MealSelection } from './src/screens/MealSelection';
+import { MealDetails } from './src/screens/MealDetails';
+import { RootStackParamList } from './src/types/navigationTypes';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
-    const onBack = () => {
-        navigation.goBack();
-    };
-
     return (
         <NavigationContainer>
             <Stack.Navigator>

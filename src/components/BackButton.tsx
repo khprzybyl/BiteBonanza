@@ -3,11 +3,14 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-export const BackButton = ({ onBack }) => {
+export const BackButton = () => {
     const navigation = useNavigation();
+
+    const onBack = () => navigation.goBack();
+
     return (
         <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={onBack}
             style={styles.backButton}
             accessibilityLabel="Go back"
             accessibilityHint="Go back to prvious screen"

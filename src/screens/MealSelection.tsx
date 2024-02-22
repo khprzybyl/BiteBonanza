@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     SafeAreaView,
@@ -7,31 +6,42 @@ import {
     FlatList,
     Text,
     View,
+    ActivityIndicator,
 } from 'react-native';
-import { MealCard } from '../components/MealCard.tsx';
 import { useNavigation } from '@react-navigation/native';
-import { fetchMeals } from '../api/api.ts';
-import { ActivityIndicator } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { MealCard } from '../components/MealCard';
+import { fetchMeals } from '../api/api';
+import { RootStackParamList } from '../types/navigationTypes';
+import { Meal } from '../types/mealTypes';
 
-export const MealSelection = () => {
-    const navigation = useNavigation();
-    const [meals, setMeals] = useState([]);
-    const [offset, setOffset] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
+interface MealSelectionProps {
+    navigation: StackNavigationProp<RootStackParamList, 'MealSelection'>;
+}
+
+export const MealSelection: React.FC<MealSelectionProps> = () => {
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    const [meals, setMeals] = useState<Meal[]>([]);
+    const [offset, setOffset] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [hasMoreMeals, setHasMoreMeals] = useState<boolean>(true);
 
     useEffect(() => {
         const getMeals = async () => {
             try {
                 setIsLoading(true);
                 let fetchedMeals = await fetchMeals(4, offset);
-                let additionalMeals = [];
-                if (fetchedMeals.length < 4) {
-                    additionalMeals = await fetchMeals(
-                        4 - fetchedMeals.length,
-                        0,
-                    );
+                let additionalMeals: Meal[] = [];
+
+                if (fetchedMeals && fetchedMeals.length < 4) {
+                    setHasMoreMeals(false);
+                    additionalMeals =
+                        (await fetchMeals(4 - fetchedMeals.length, 0)) || [];
+                } else {
+                    setHasMoreMeals(true);
                 }
-                setMeals([...fetchedMeals, ...additionalMeals]);
+
+                setMeals([...(fetchedMeals || []), ...additionalMeals]);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -43,10 +53,10 @@ export const MealSelection = () => {
     }, [offset]);
 
     const handleRefresh = () => {
-        setOffset((prevOffset) => prevOffset + 4);
+        setOffset((prevOffset) => (hasMoreMeals ? prevOffset + 4 : 0));
     };
 
-    const renderItem = ({ item, index }) => (
+    const renderItem = ({ item, index }: { item: Meal; index: number }) => (
         <MealCard
             key={item?.id}
             style={index % 2 === 0 ? { marginRight: 22 } : null}
@@ -107,15 +117,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 80,
         paddingHorizontal: 20,
-        borderRadius: '100%',
+        borderRadius: 40,
         width: '100%',
         marginTop: 5,
     },
-
     button: {
         fontSize: 25,
         fontWeight: 'bold',
         letterSpacing: 2,
         color: '#ffffff',
+    },
+    empty: {
+        justifyContent: 'center',
+        fontSize: 25,
+        fontWeight: 'bold',
+        padding: 20,
     },
 });

@@ -1,24 +1,48 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     Image,
     SafeAreaView,
     ScrollView,
-    TouchableOpacity,
     Text,
     View,
+    NativeSyntheticEvent,
+    ImageErrorEventData,
 } from 'react-native';
-import { fetchMealDetails } from '../api/api.ts';
-import { DEFAULT_IMAGE } from '../constants/Images.ts';
-import { BackButton } from '../components/BackButton.tsx';
-import useHeaderOptions from '../hooks/useHeaderOptions.tsx';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
+import { fetchMealDetails } from '../api/api';
+import useHeaderOptions from '../hooks/useHeaderOptions';
+import { RootStackParamList } from '../types/navigationTypes';
+import { MealDetailsTypes } from '../types/mealTypes';
+import { DEFAULT_IMAGE } from '../constants/Images';
 
-export const MealDetails = ({ navigation, route }) => {
+
+type MealDetailsScreenRouteProp = RouteProp<
+    { MealDetails: { mealId: number } },
+    'MealDetails'
+>;
+
+type MealDetailsScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'MealDetails'
+>;
+
+interface MealDetailsProps {
+    navigation: MealDetailsScreenNavigationProp;
+    route: MealDetailsScreenRouteProp;
+}
+
+export const MealDetails: React.FC<MealDetailsProps> = ({
+    navigation,
+    route,
+}) => {
     useHeaderOptions(navigation);
     const { mealId } = route.params;
 
-    const [mealDetails, setMealDetails] = useState(null);
+    const [mealDetails, setMealDetails] = useState<MealDetailsTypes | null>(
+        null,
+    );
 
     useEffect(() => {
         const getMealDetails = async () => {
@@ -33,6 +57,14 @@ export const MealDetails = ({ navigation, route }) => {
         getMealDetails();
     }, [mealId]);
 
+    const handleError = (e: NativeSyntheticEvent<ImageErrorEventData>) => {
+        console.log('Image loading error:', e.nativeEvent.error);
+        setMealDetails((prevState) => {
+            if (!prevState) return null;
+            return { ...prevState, picture: DEFAULT_IMAGE };
+        });
+    };
+
     if (mealDetails) {
         return (
             <SafeAreaView style={styles.container}>
@@ -40,13 +72,7 @@ export const MealDetails = ({ navigation, route }) => {
                     <Image
                         source={{ uri: mealDetails?.picture || DEFAULT_IMAGE }}
                         style={styles.image}
-                        onError={({ nativeEvent: { error } }) => {
-                            console.log('Image loading error:', error);
-                            setMealDetails((prevState) => ({
-                                ...prevState,
-                                picture: DEFAULT_IMAGE,
-                            }));
-                        }}
+                        onError={handleError}
                     />
                     <View style={styles.detailsContainer}>
                         <Text style={styles.title}>{mealDetails?.title}</Text>

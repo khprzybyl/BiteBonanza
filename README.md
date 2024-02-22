@@ -1,5 +1,9 @@
 Bite Bonanza is a mobile application designed for food enthusiasts who love exploring new meal options. Built with React Native, Expo, and TypeScript, this app provides an easy and interactive way to search for various meals, recipes, and culinary inspirations.
 
+Watch video to see the app in action.
+
+https://github.com/khprzybyl/BiteBonanza/assets/101949054/ef8e2457-b8d7-496f-9191-d40e77257b86
+
 # Bite Bonanza
 
 Bite Bonanza is a mobile application designed for food enthusiasts who love exploring new meal options. Built with React Native, Expo, and TypeScript, this app provides an easy and interactive way to search for various meals, recipes, and culinary inspirations.

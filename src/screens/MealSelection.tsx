@@ -25,6 +25,7 @@ export const MealSelection: React.FC<MealSelectionProps> = () => {
     const [offset, setOffset] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hasMoreMeals, setHasMoreMeals] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const getMeals = async () => {
@@ -42,8 +43,8 @@ export const MealSelection: React.FC<MealSelectionProps> = () => {
                 }
 
                 setMeals([...(fetchedMeals || []), ...additionalMeals]);
-            } catch (error) {
-                console.error(error);
+            } catch (err) {
+                setError('Error fetching meals');
             } finally {
                 setIsLoading(false);
             }
@@ -65,14 +66,24 @@ export const MealSelection: React.FC<MealSelectionProps> = () => {
             onPress={() =>
                 navigation.navigate('MealDetails', { mealId: item.id })
             }
+            testID={`meal-item-${item.id}`}
         />
     );
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.listContainer}>
+                {error && (
+                    <Text testID="error-message" style={styles.errorMessage}>
+                        {error}
+                    </Text>
+                )}
                 {isLoading ? (
-                    <ActivityIndicator size="large" color="#2E0F86" />
+                    <ActivityIndicator
+                        testID="loading-indicator"
+                        size="large"
+                        color="#2E0F86"
+                    />
                 ) : (
                     <FlatList
                         data={meals}
@@ -105,6 +116,11 @@ const styles = StyleSheet.create({
         marginTop: 70,
         margin: 15,
         flex: 1,
+    },
+    errorMessage: {
+        color: 'red',
+        textAlign: 'center',
+        fontSize: 16,
     },
     listContainer: {
         flex: 1,

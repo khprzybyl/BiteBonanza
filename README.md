@@ -35,6 +35,10 @@ yarn install
 
 yarn ios
 
+5. Test app:
+
+yarn test
+
 ## Built With
 
 -   [React Native](https://reactnative.dev/) - The framework used

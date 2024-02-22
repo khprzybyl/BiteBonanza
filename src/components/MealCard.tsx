@@ -14,6 +14,7 @@ interface MealCardProps {
     imageSrc: string;
     title: string;
     style?: ViewStyle | null;
+    testID?: string;
 }
 
 export const MealCard: React.FC<MealCardProps> = ({
@@ -21,6 +22,7 @@ export const MealCard: React.FC<MealCardProps> = ({
     imageSrc,
     title,
     style,
+    testID,
 }) => {
     const [imageSource, setImageSource] = useState<string>(imageSrc);
 
@@ -29,7 +31,11 @@ export const MealCard: React.FC<MealCardProps> = ({
     };
 
     return (
-        <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
+        <TouchableOpacity
+            onPress={onPress}
+            style={[styles.container, style]}
+            testID={testID}
+        >
             <Image
                 source={{ uri: imageSource }}
                 style={styles.image}

@@ -12,8 +12,10 @@ import {
 import { fetchMealDetails } from '../api/api.ts';
 import { DEFAULT_IMAGE } from '../constants/Images.ts';
 import { BackButton } from '../components/BackButton.tsx';
+import useHeaderOptions from '../hooks/useHeaderOptions.tsx';
 
 export const MealDetails = ({ navigation, route }) => {
+    useHeaderOptions(navigation);
     const { mealId } = route.params;
 
     const [mealDetails, setMealDetails] = useState(null);
@@ -69,6 +71,7 @@ export const MealDetails = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginTop: 70,
     },
     title: {
         fontSize: 24,

@@ -7,10 +7,18 @@ import { MealDetails } from './src/screens/MealDetails.tsx';
 const Stack = createStackNavigator();
 
 export default function App() {
+    const onBack = () => {
+        navigation.goBack();
+    };
+
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="MealSelection" component={MealSelection} />
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="MealSelection"
+                    component={MealSelection}
+                    options={{ headerShown: false }}
+                />
                 <Stack.Screen name="MealDetails" component={MealDetails} />
             </Stack.Navigator>
         </NavigationContainer>

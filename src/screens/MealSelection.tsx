@@ -82,7 +82,7 @@ export const MealSelection = () => {
                 accessibilityHint="Updates the list of meals with new items"
                 accessibilityRole="button"
             >
-                <Text style={styles.button}>{textButton}</Text>
+                <Text style={styles.button}>REFRESH</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginTop: 70,
         margin: 15,
-        marginTop: 50,
         flex: 1,
     },
     listContainer: {
@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#2E0F86',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 100,
+        height: 80,
         paddingHorizontal: 20,
         borderRadius: '100%',
         width: '100%',
-        marginTop: 10,
+        marginTop: 5,
     },
 
     button: {

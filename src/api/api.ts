@@ -5,7 +5,6 @@ export const fetchMealsWithOffset = async (offset: number) => {
     const PagginatedMealsUrl = `https://playground.devskills.co/api/rest/meal-roulette-app/meals/limit/4/offset/${offset}`;
     try {
         const response = await axios.get(PagginatedMealsUrl);
-        console.log('response.data', response.data);
 
         const data = await response.data;
         return data.meal_roulette_app_meals_aggregate.nodes;

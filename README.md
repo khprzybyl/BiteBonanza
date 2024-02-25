@@ -2,7 +2,11 @@ Bite Bonanza is a mobile application designed for food enthusiasts who love expl
 
 Watch video to see the app in action.
 
+App without tanstack-react-query
 https://github.com/khprzybyl/BiteBonanza/assets/101949054/ef8e2457-b8d7-496f-9191-d40e77257b86
+
+App with implemented tanstack-react-query
+https://github.com/khprzybyl/BiteBonanza/assets/101949054/75588001-1670-48bc-b3b3-385d190eb9d7
 
 # Bite Bonanza
 
@@ -35,7 +39,7 @@ cd bite-bonanza
 
 yarn install
 
-4. Start the development server:
+4. Start the development server for ios:
 
 yarn ios
 

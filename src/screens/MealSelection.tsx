@@ -6,12 +6,13 @@ import {
     FlatList,
     Text,
     View,
-    ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MealCard } from '../components/MealCard';
-import { fetchMeals } from '../api/api';
+import { Error } from '../components/Error';
+import { ActivityIndicator } from '../components/ActivityIndicator';
+import { UseMealsQuery } from '../hooks/useMealsQuery';
 import { RootStackParamList } from '../types/navigationTypes';
 import { Meal } from '../types/mealTypes';
 
@@ -21,41 +22,25 @@ interface MealSelectionProps {
 
 export const MealSelection: React.FC<MealSelectionProps> = () => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    const [meals, setMeals] = useState<Meal[]>([]);
-    const [offset, setOffset] = useState<number>(0);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [hasMoreMeals, setHasMoreMeals] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [offset, setOffset] = useState(0);
 
-    useEffect(() => {
-        const getMeals = async () => {
-            try {
-                setIsLoading(true);
-                let fetchedMeals = await fetchMeals(4, offset);
-                let additionalMeals: Meal[] = [];
-
-                if (fetchedMeals && fetchedMeals.length < 4) {
-                    setHasMoreMeals(false);
-                    additionalMeals =
-                        (await fetchMeals(4 - fetchedMeals.length, 0)) || [];
-                } else {
-                    setHasMoreMeals(true);
-                }
-
-                setMeals([...(fetchedMeals || []), ...additionalMeals]);
-            } catch (err) {
-                setError('Error fetching meals');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        getMeals();
-    }, [offset]);
+    const { data, isLoading, error } = UseMealsQuery(offset);
 
     const handleRefresh = () => {
-        setOffset((prevOffset) => (hasMoreMeals ? prevOffset + 4 : 0));
+        if (offset === 8) {
+            setOffset((prevOffset) => (prevOffset = 0));
+        } else {
+            setOffset((prevOffset) => prevOffset + 4);
+        }
     };
+
+    if (isLoading) {
+        return <ActivityIndicator testID="loading-indicator" />;
+    }
+
+    if (error) {
+        return <Error />;
+    }
 
     const renderItem = ({ item, index }: { item: Meal; index: number }) => (
         <MealCard
@@ -73,28 +58,15 @@ export const MealSelection: React.FC<MealSelectionProps> = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.listContainer}>
-                {error && (
-                    <Text testID="error-message" style={styles.errorMessage}>
-                        {error}
-                    </Text>
-                )}
-                {isLoading ? (
-                    <ActivityIndicator
-                        testID="loading-indicator"
-                        size="large"
-                        color="#2E0F86"
-                    />
-                ) : (
-                    <FlatList
-                        data={meals}
-                        numColumns={2}
-                        keyExtractor={(item) => String(item?.id)}
-                        ListEmptyComponent={
-                            <Text style={styles.empty}>No meals data</Text>
-                        }
-                        renderItem={renderItem}
-                    />
-                )}
+                <FlatList
+                    data={data}
+                    numColumns={2}
+                    keyExtractor={(item) => String(item?.id)}
+                    ListEmptyComponent={
+                        <Text style={styles.empty}>No meals data</Text>
+                    }
+                    renderItem={renderItem}
+                />
             </View>
             <TouchableOpacity
                 onPress={handleRefresh}
@@ -113,14 +85,9 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'space-between',
         alignItems: 'center',
+        margin: 22,
         marginTop: 70,
-        margin: 15,
         flex: 1,
-    },
-    errorMessage: {
-        color: 'red',
-        textAlign: 'center',
-        fontSize: 16,
     },
     listContainer: {
         flex: 1,

@@ -11,12 +11,13 @@ import {
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { fetchMealDetails } from '../api/api';
+import { UseMealsQuery } from '../hooks/useMealDetailsQuery';
 import useHeaderOptions from '../hooks/useHeaderOptions';
-import { RootStackParamList } from '../types/navigationTypes';
-import { MealDetailsTypes } from '../types/mealTypes';
+import { Error } from '../components/Error';
+import { ActivityIndicator } from '../components/ActivityIndicator';
 import { DEFAULT_IMAGE } from '../constants/Images';
-
+import { layout } from '../constants/Layout';
+import { RootStackParamList } from '../types/navigationTypes';
 
 type MealDetailsScreenRouteProp = RouteProp<
     { MealDetails: { mealId: number } },
@@ -40,53 +41,56 @@ export const MealDetails: React.FC<MealDetailsProps> = ({
     useHeaderOptions(navigation);
     const { mealId } = route.params;
 
-    const [mealDetails, setMealDetails] = useState<MealDetailsTypes | null>(
-        null,
-    );
+    const { isLoading, isError, data } = UseMealsQuery(mealId);
+
+    const [imageUri, setImageUri] = useState<string>(DEFAULT_IMAGE);
 
     useEffect(() => {
-        const getMealDetails = async () => {
-            const details = await fetchMealDetails(mealId);
-            if (details) {
-                setMealDetails(details);
-            } else {
-                console.log(`No details found for mealId ${mealId}`);
-            }
-        };
-
-        getMealDetails();
-    }, [mealId]);
+        if (data && data.picture) {
+            setImageUri(data.picture);
+        }
+    }, [data]);
 
     const handleError = (e: NativeSyntheticEvent<ImageErrorEventData>) => {
         console.log('Image loading error:', e.nativeEvent.error);
-        setMealDetails((prevState) => {
-            if (!prevState) return null;
-            return { ...prevState, picture: DEFAULT_IMAGE };
-        });
+        setImageUri(DEFAULT_IMAGE);
     };
 
-    if (mealDetails) {
+    if (isLoading) {
+        return <ActivityIndicator />;
+    }
+
+    if (isError) {
+        return <Error />;
+    }
+
+    if (data) {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Image
-                        source={{ uri: mealDetails?.picture || DEFAULT_IMAGE }}
+                        source={{ uri: imageUri }}
                         style={styles.image}
                         onError={handleError}
                     />
                     <View style={styles.detailsContainer}>
-                        <Text style={styles.title}>{mealDetails?.title}</Text>
+                        <Text style={styles.title}>{data?.title}</Text>
                         <Text style={styles.description}>
-                            {mealDetails?.description}
+                            {data?.description}
                         </Text>
                         <Text style={styles.ingredientsTitle}>Ingredients</Text>
-                        {mealDetails?.ingredients
-                            .split(',')
-                            .map((ingredient, index) => (
-                                <Text key={index} style={styles.ingredients}>
-                                    {ingredient.trim()}
-                                </Text>
-                            ))}
+                        {data?.ingredients
+                            ? data.ingredients
+                                  .split(',')
+                                  .map((ingredient, index) => (
+                                      <Text
+                                          key={index}
+                                          style={styles.ingredients}
+                                      >
+                                          {ingredient.trim()}
+                                      </Text>
+                                  ))
+                            : null}
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -98,36 +102,42 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 70,
+        width: layout.window.width - 52,
+        alignSelf: 'center',
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        padding: 15,
+        marginTop: 20,
+        marginBottom: 17,
         textAlign: 'left',
     },
     description: {
         fontSize: 20,
         fontWeight: 'normal',
-        paddingLeft: 15,
-        paddingRight: 15,
         lineHeight: 26,
-        marginBottom: 15,
+        marginBottom: 24,
     },
     ingredientsTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        padding: 15,
+        paddingBottom: 17,
     },
     ingredients: {
         fontSize: 20,
-        paddingLeft: 15,
-        paddingRight: 15,
-        paddingBottom: 15,
+        paddingBottom: 17,
     },
     image: {
-        width: '100%',
+        width: layout.window.width - 52,
         aspectRatio: 1,
-        resizeMode: 'contain',
+        resizeMode: 'cover',
+        alignSelf: 'center',
+        borderRadius: 17,
     },
     detailsContainer: {
         marginBottom: 50,

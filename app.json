@@ -1,40 +1,35 @@
 {
-  "expo": {
-    "name": "bite-bonanza",
-    "slug": "bite-bonanza",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./src/assets/logo.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./src/assets/logo-name.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.kprzybyl.bitebonanza"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./src/assets/logo.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "favicon": "./src/assets/logo.png"
-    },
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "f8cd960d-40ac-4864-b893-e9a7497411fe"
-      }
+    "expo": {
+        "name": "bite-bonanza",
+        "slug": "bite-bonanza",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./src/assets/logo-name.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./src/assets/logo-name.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.kprzybyl.bitebonanza"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./src/assets/logo-name.png",
+                "backgroundColor": "#ffffff"
+            }
+        },
+        "web": {
+            "favicon": "./src/assets/logo-name.png"
+        },
+        "platforms": ["ios", "android"],
+        "extra": {
+            "eas": {
+                "projectId": "f8cd960d-40ac-4864-b893-e9a7497411fe"
+            }
+        }
     }
-  }
 }

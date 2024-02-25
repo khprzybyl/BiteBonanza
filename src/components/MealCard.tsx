@@ -50,17 +50,17 @@ export const MealCard: React.FC<MealCardProps> = ({
 
 const styles = StyleSheet.create({
     container: {
-        padding: 3,
         marginBottom: 10,
     },
     title: {
         color: '#2E0F86',
         fontSize: 20,
         fontWeight: 'bold',
-        padding: 10,
+        marginTop: 10,
+        marginBottom: 20,
         flexWrap: 'wrap',
         maxWidth: (layout.window.width - 68) / 2,
-        textAlign: 'center',
+        textAlign: 'left',
         lineHeight: 26,
     },
     image: {

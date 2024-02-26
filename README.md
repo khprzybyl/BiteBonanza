@@ -27,7 +27,7 @@ Before you start, ensure you have the following installed:
 
 ### Installing
 
-Follow these steps to set up the development environment:
+##Follow these steps to set up the development environment:
 
 1. Clone the repository: git clone https://github.com/khprzybyl/BiteBonanza.git
 
@@ -52,3 +52,18 @@ yarn test
 -   [React Native](https://reactnative.dev/) - The framework used
 -   [Expo](https://expo.dev/) - Platform for universal React applications
 -   [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript for better developer experience
+
+##To run the app using the Expo Development Client:
+
+1. Ensure you have Node.js installed on your machine.
+2. Clone the repository and navigate to the project directory.
+3. Install the dependencies:
+
+yarn install
+
+4. Start the app with the following command:
+
+npx expo start --dev-client
+
+The above command will open up a Metro Bundler in your default web browser.
+You can then run the app on an simulator, or a physical device by following the instructions on the Metro Bundler page.
